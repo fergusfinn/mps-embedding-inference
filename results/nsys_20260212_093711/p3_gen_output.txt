@@ -1,0 +1,9 @@
+Warming up...
+Benchmarking for 25s with 8 concurrent requests, max_tokens=256...
+
+=== Generative Benchmark Results ===
+Duration: 29.8s
+Total requests: 56
+Total tokens generated: 14336
+Throughput: 480.8 tokens/sec
+Avg tokens/request: 256.0

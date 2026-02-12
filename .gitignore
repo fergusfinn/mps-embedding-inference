@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+
+# nsys binary profiles (large, regenerable from scripts)
+*.nsys-rep
+*.sqlite
+*.qdstrm
