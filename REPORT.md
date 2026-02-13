@@ -12,7 +12,18 @@ These two workloads have complementary resource profiles. If we can run them sim
 
 In production, embedding and generative models are typically served on separate GPUs. This is simple but wasteful: the generative GPU's compute units sit partially idle during decode, and the embedding GPU may be underutilized between bursts of indexing traffic.
 
-An alternative: put both models on the same GPU. The constraint is VRAM -- both sets of weights, plus KV cache, must fit. On an NVIDIA H200 (141 GB HBM3e), this is feasible:
+An alternative: co-locate both models on the same hardware. But on a single GPU, this is strictly worse than having two separate GPUs -- you're splitting one GPU's resources between two workloads, and each gets less than it would standalone. There's no free lunch on 1 GPU.
+
+The interesting case is **two GPUs with TP=2 for both models**. Here the baseline is meaningful:
+
+- **Baseline**: 2 GPUs, gen on GPU 0 (TP=1), embed on GPU 1 (TP=1)
+- **Experiment**: 2 GPUs, gen across both (TP=2) + embed across both (TP=2) via MPS
+
+With TP=2, gen gets 2x memory bandwidth (9.6 TB/s vs 4.8 TB/s), directly helping the bandwidth-bound MoE decode. It also gets 2x VRAM for KV cache (more concurrent sequences) and 2x SMs. If the per-GPU MPS interference from embed is small enough, the TP=2 gen throughput could exceed the TP=1 baseline -- a net win on gen *and* embed from the same 2 GPUs.
+
+The single-GPU experiment below is a proof of concept: validating that MPS interference is low enough to justify the TP=2 experiment, and characterizing how much overhead co-location actually introduces.
+
+### VRAM budget (single GPU)
 
 | Component | VRAM |
 |---|---|
@@ -20,8 +31,6 @@ An alternative: put both models on the same GPU. The constraint is VRAM -- both 
 | KV cache (gpu_mem_util=0.50) | ~40 GB |
 | Qwen3-Embedding-8B (BF16 weights) | ~15 GB |
 | **Total** | **~85 GB / 141 GB** |
-
-The natural extension is two GPUs with TP=2 for both models, doubling the memory bandwidth available to each while still sharing the hardware. This report covers the single-GPU proof of concept; the TP=2 experiment is future work.
 
 ## 3. Proof of Concept
 
@@ -122,12 +131,40 @@ DRAM bandwidth plateaus at ~28% of the H200's 4.8 TB/s peak. Even at C=4096, ove
 
 ## 4. TP=2 Experiment
 
-Not yet conducted. The hypothesis: with tensor parallelism across 2 GPUs, each GPU holds half the model weights and contributes half the memory bandwidth. Both models run with TP=2 on the same pair of GPUs. This doubles the available bandwidth for each model while still enabling MPS co-scheduling on each GPU. Expected benefits:
+Not yet conducted. This is where the real value proposition lives.
 
-- Higher gen throughput (more bandwidth per model shard)
-- More VRAM for KV cache
-- Lower per-GPU power draw (work split across two GPUs)
-- Potentially even lower co-location interference
+### The baseline
+
+2 GPUs, each dedicated to one workload:
+- GPU 0: gen model (TP=1), full 141 GB for weights + KV cache, 4.8 TB/s bandwidth
+- GPU 1: embed model (TP=1), using ~15 GB of 141 GB
+
+This is how you'd deploy today. GPU 1 is massively underutilized.
+
+### The experiment
+
+Same 2 GPUs, both workloads on both GPUs via TP=2 + MPS:
+- Gen model: TP=2 across both GPUs, ~15 GB weights per GPU, KV cache split across both
+- Embed model: TP=2 across both GPUs, ~7.5 GB weights per GPU
+- MPS on each GPU enables parallel kernel execution between gen and embed
+
+### Why this could be a net positive
+
+Gen with TP=2 gets:
+- **2x memory bandwidth** (9.6 TB/s total) -- directly helps the bandwidth-bound MoE decode
+- **2x VRAM for KV cache** -- more concurrent sequences before saturation
+- **2x SMs** (264 total) -- more parallel decode capacity
+
+From the single-GPU experiment, MPS co-location costs gen ~2.4% throughput. If TP=2 gen throughput is more than 2.4% higher than TP=1 (which is likely, given the model is bandwidth-bound), the co-located TP=2 setup beats the dedicated-GPU baseline on gen throughput *while also serving embeddings*.
+
+### What to measure
+
+| Condition | GPUs | Gen | Embed |
+|---|---|---|---|
+| Baseline: separate GPUs | 2 | TP=1 on GPU 0 | TP=1 on GPU 1 |
+| Co-located TP=2 + MPS | 2 | TP=2 on both | TP=2 on both |
+
+Success: co-located gen throughput >= baseline gen throughput, with embed throughput as bonus.
 
 ## 5. Conclusion
 
