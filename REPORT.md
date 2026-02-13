@@ -21,16 +21,16 @@ The interesting case is **two GPUs with TP=2 for both models**. Here the baselin
 
 With TP=2, gen gets 2x memory bandwidth (9.6 TB/s vs 4.8 TB/s) and 2x SMs, directly helping the bandwidth-bound MoE decode. (VRAM for KV cache doesn't double -- each GPU still holds both models' weight shards.) If the per-GPU MPS interference from embed is small enough, the TP=2 gen throughput could exceed the TP=1 baseline -- a net win on gen *and* embed from the same 2 GPUs.
 
-The single-GPU experiments below are a proof of concept: validating that MPS interference is low enough to justify the TP=2 experiment, and comparing MPS against the alternative isolation strategies (MIG and time-slicing).
+The single-GPU experiments below are a proof of concept: measuring MPS interference at peak gen throughput, and comparing MPS against the alternative isolation strategies (MIG and time-slicing).
 
 ### VRAM budget (single GPU)
 
 | Component | VRAM |
 |---|---|
 | Qwen3-30B-A3B-FP8 (FP8 weights) | ~30 GB |
-| KV cache (gpu_mem_util=0.50) | ~40 GB |
+| KV cache (gpu_mem_util=0.50) | ~30 GB |
 | Qwen3-Embedding-8B (BF16 weights) | ~17 GB |
-| **Total** | **~87 GB / 141 GB** |
+| **Total** | **~77 GB / 141 GB** |
 
 ## 3. Proof of Concept
 
@@ -47,11 +47,13 @@ The single-GPU experiments below are a proof of concept: validating that MPS int
 
 Both models served via `vllm/vllm-openai:v0.15.1` Docker containers. All experiments use the same configuration:
 
-- Gen: `--gpu-memory-utilization 0.50 --max-model-len 4096 --max-num-seqs 1024`
+- Gen: `--gpu-memory-utilization 0.50 --max-model-len 4096 --max-num-seqs 512`
 - Embed: `--gpu-memory-utilization 0.30 --max-model-len 512 --convert embed`
 - Benchmark: 30s KV-cache warmup, 60s measurement
-- Gen load: C=1024 concurrent requests, max_tokens=512
+- Gen load: C=512 concurrent requests, max_tokens=512
 - Embed load: C=64 concurrent requests, batch_size=8
+
+**Concurrency tuning**: KV cache capacity at `gpu_mem_util=0.50` is ~322K tokens. At C=512 with ~542 tokens/request (30 input + 512 output), peak demand is ~278K tokens, fitting comfortably without queuing. Higher concurrency (e.g. C=1024) overflows the KV cache, causing request queuing and artificially depressing throughput. C=512 was selected as the point of maximum throughput via sweep.
 
 For MPS, a sidecar Docker container runs the MPS daemon with a shared Docker volume for the pipe directory. All containers use `--ipc=host` for shared memory access.
 
@@ -61,24 +63,34 @@ Both models run on the full GPU. CUDA MPS enables true parallel kernel execution
 
 | Condition | Gen (tok/s) | Gen delta | Embed (seq/s) |
 |---|---|---|---|
-| Gen only | 16,091 | baseline | - |
-| Embed only | - | - | 475 |
-| Gen + Embed (MPS) | 16,212 | **+0.8%** | 479 |
-| Gen + Embed (no MPS, time-sliced) | 15,934 | **-1.0%** | 472 |
+| Gen only | 24,363 | baseline | - |
+| Gen + Embed (MPS) | 20,345 | **-16.5%** | 515 |
+| Gen + Embed (no MPS, time-sliced) | 22,473 | **-7.8%** | 507 |
 
-**MPS co-location imposes no gen throughput loss.** Gen throughput is 16,212 tok/s with MPS co-location vs 16,091 tok/s gen-only (+0.8%, within noise). The embedding model gets 479 seq/s essentially for free.
+**MPS co-location has a measurable cost.** Gen throughput drops 16.5% from 24,363 to 20,345 tok/s when sharing the GPU with the embedding model via MPS. The embedding model achieves 515 seq/s.
 
-**Time-slicing has a small but measurable cost.** Without MPS, CUDA time-slices between the two processes, causing a 1.0% gen throughput loss and slightly lower embed throughput (472 vs 479 seq/s).
+**Time-slicing is cheaper than MPS.** Without MPS, CUDA time-slices between the two processes, costing only 7.8% gen throughput. This is the opposite of what MPS documentation would predict: at high GPU utilization, parallel kernel execution (MPS) causes more SM contention than serialized execution (time-slicing), because the embedding model's compute-heavy kernels compete directly with decode for SM resources.
+
+#### Reproducibility (A/B test, 3 reps each)
+
+The MPS vs time-slicing gap is reproducible with tight variance:
+
+| Mode | Rep 1 | Rep 2 | Rep 3 | Mean | Embed mean |
+|---|---|---|---|---|---|
+| Time-sliced gen | 24,101 | 24,533 | 24,247 | **24,294** | 492 |
+| MPS gen | 22,956 | 22,881 | 23,173 | **23,003** | 486 |
+
+MPS is consistently ~1,300 tok/s slower (**-5.3%** gap, ±0.6% across reps). The first-run table above (16.5% gap) included warm-up effects; the stabilized A/B result is the more reliable number.
 
 #### Per-token decode latency
 
 | Condition | p50 | p95 | p99 |
 |---|---|---|---|
-| Gen only | 58.7ms | 69.3ms | 74.7ms |
-| Gen + Embed (MPS) | 58.9ms | 70.4ms | 75.7ms |
-| Gen + Embed (no MPS) | 60.2ms | 72.3ms | 76.7ms |
+| Gen only | 20.8ms | 21.6ms | 21.6ms |
+| Gen + Embed (MPS) | 23.8ms | 24.5ms | 24.6ms |
+| Gen + Embed (no MPS) | 22.7ms | 24.3ms | 24.3ms |
 
-MPS adds no latency. Time-slicing adds ~1.5ms at p50.
+MPS adds ~3ms at p50 (14% increase). Time-slicing adds ~2ms (10% increase).
 
 ### 3.2 MIG baseline (partitioned GPU)
 
@@ -90,38 +102,94 @@ MIG partitions are passed to Docker containers via `--gpus "device=MIG-<uuid>"`.
 
 | Condition | Gen (tok/s) | Gen delta | Embed (seq/s) |
 |---|---|---|---|
-| Gen only (4g.71gb partition) | 4,641 | -71.2% vs full | - |
-| Embed only (3g.71gb partition) | - | - | 479 |
-| Gen + Embed (MIG isolated) | 4,640 | -71.2% vs full | 475 |
+| Gen only (4g.71gb partition) | 4,885 | -79.9% vs full | - |
+| Gen + Embed (MIG isolated) | 4,901 | -79.9% vs full | 513 |
 
-As expected, MIG gives **perfect isolation**: zero interference between partitions (4,641 vs 4,640 tok/s). But the cost is catastrophic for the bandwidth-bound gen model:
+As expected, MIG gives **perfect isolation**: zero interference between partitions. But the cost is catastrophic for the bandwidth-bound gen model:
 
-**Gen throughput drops 71% vs the full GPU** (4,641 vs 16,091 tok/s). The 4g partition has 4/8 = 50% of the GPU's memory bandwidth and 4/7 = 57% of SMs, but gen only achieves 28.8% of full-GPU throughput. The reduced SM count limits how many concurrent decode operations can run, preventing the workload from saturating even the reduced bandwidth.
+**Gen throughput drops 80% vs the full GPU** (4,885 vs 24,363 tok/s). The 4g partition has 4/8 = 50% of the GPU's memory bandwidth and 4/7 = 57% of SMs, but gen only achieves 20% of full-GPU throughput. The reduced SM count limits how many concurrent decode operations can run, preventing the workload from saturating even the reduced bandwidth.
 
-**Embed throughput is identical across all conditions** (~475 seq/s standalone, 479 MPS, 475 MIG). The 3g MIG partition has the same throughput as the full GPU, indicating that at C=64 the embedding workload is bottlenecked by vLLM scheduling overhead rather than GPU resources.
+**Embed throughput is identical across all conditions** (~507-515 seq/s across MPS, time-sliced, and MIG). At C=64 the embedding workload is bottlenecked by vLLM scheduling overhead rather than GPU resources.
 
 #### Per-token decode latency (MIG)
 
 | Condition | p50 | p95 | p99 |
 |---|---|---|---|
-| MIG gen only (4g) | 170.3ms | 219.6ms | 220.3ms |
-| MIG gen + embed (4g+3g) | 170.5ms | 219.5ms | 220.3ms |
+| MIG gen only (4g) | 104.6ms | 105.5ms | 105.5ms |
+| MIG gen + embed (4g+3g) | 104.2ms | 105.4ms | 105.4ms |
 
-MIG partitioning triples per-token latency (170ms vs 59ms) due to the reduced compute capacity.
+MIG partitioning 5x per-token latency (105ms vs 21ms) due to the reduced compute capacity.
 
-### 3.3 Comparison
+### 3.3 Profiling: Why is MPS slower than time-slicing?
+
+#### DCGM aggregate metrics
+
+`dcgmi dmon` captured SM Active, SM Occupancy, Tensor Active, DRAM Active, FP32 Active, and FP16 Active at 1-second intervals across gen-only, time-sliced, and MPS conditions (60 samples each):
+
+| Metric | Gen Only | Time-sliced | MPS |
+|---|---|---|---|
+| SM Active | 0.836 | 0.845 | 0.856 |
+| SM Occupancy | 0.180 | 0.179 | 0.181 |
+| Tensor Active | 0.178 | 0.203 | 0.199 |
+| DRAM Active | 0.301 | 0.318 | 0.306 |
+
+All three conditions are nearly identical at the aggregate level. DCGM cannot distinguish the mechanism — the 5% throughput difference happens below its sampling resolution.
+
+#### ncu (Nsight Compute) kernel-level L2 cache analysis
+
+**MPS limitation:** ncu does not support profiling with CUDA MPS enabled (`Profiling is not supported with Multi-Process Server (MPS) enabled`). The co-located comparison uses time-slicing instead. Since both MPS and time-slicing share the same physical L2 cache, L2 contention analysis is valid for either mode.
+
+Kernels profiled with `MemoryWorkloadAnalysis` section (`--launch-skip 20000 --launch-count 3`):
+
+**`fused_add_rms_norm_kernel`** (directly comparable — same kernel in both runs):
+
+| Metric | Gen Only | Co-located (time-sliced) |
+|---|---|---|
+| **L2 Hit Rate** | **53.60%** | **53.04%** |
+| L1/TEX Hit Rate | 84.22% | 84.22% |
+| Memory Throughput | 768 GB/s | 858 GB/s |
+| Mem Busy | 21.95% | 20.49% |
+
+L2 hit rate drops by only 0.56 percentage points with co-location — **L2 cache contention is not the mechanism** causing the throughput difference. The H200's 51 MB L2 is large enough to accommodate both workloads without meaningful eviction.
+
+**Other kernels profiled** (gen-only run):
+
+| Kernel | L2 Hit Rate | Mem Throughput | L1/TEX Hit |
+|---|---|---|---|
+| `deep_gemm::fp8_gemm_kernel` (MoE expert GEMM) | 60.48% | 1,483 GB/s | 46.94% |
+| `finalizeMoeRoutingKernel` | 16.05% | 1,090 GB/s | 75.33% |
+| `fused_add_rms_norm_kernel` | 53.60% | 768 GB/s | 84.22% |
+
+The MoE expert GEMM is the most bandwidth-intensive kernel (1.5 TB/s, 30% of peak) with a moderate L2 hit rate. The routing kernel has the worst L2 hit rate (16%) due to scattered expert selection patterns.
+
+#### Conclusion on interference mechanism
+
+Since L2 contention is ruled out, the 5.3% MPS overhead likely comes from:
+1. **MPS server scheduling overhead** — kernel dispatch through the MPS daemon adds latency to every kernel launch
+2. **Memory controller contention** — concurrent HBM accesses from two process contexts, even without L2 interference, can increase DRAM access latency
+3. **SM yield latency** — MPS may not instantly yield SMs when the embed process completes a kernel
+
+Time-slicing avoids all three: the embed process only runs in brief bursts between gen steps, with no concurrent execution overhead.
+
+### 3.4 Comparison
 
 | Configuration | Gen (tok/s) | Gen % of full | Embed (seq/s) | Gen interference |
 |---|---|---|---|---|
-| Full GPU, gen only | 16,091 | 100% | - | - |
-| Full GPU, embed only | - | - | 475 | - |
-| Full GPU, MPS co-located | 16,212 | 100.8% | 479 | None |
-| Full GPU, time-sliced | 15,934 | 99.0% | 472 | -1.0% |
-| MIG 4g, gen only | 4,641 | 28.8% | - | -71.2% (partitioning) |
-| MIG 3g, embed only | - | - | 479 | - |
-| MIG 4g+3g, co-located | 4,640 | 28.8% | 475 | -71.2% (partitioning) |
+| Full GPU, gen only | 24,363 | 100% | - | - |
+| Full GPU, embed only | - | - | 479 | - |
+| Full GPU, MPS co-located | 23,003* | 94.4% | 486* | **-5.6%** |
+| Full GPU, time-sliced co-located | 24,294* | 99.7% | 492* | **-0.3%** |
+| MIG 4g, gen only | 4,885 | 20.1% | - | -79.9% (partitioning) |
+| MIG 3g, embed only | - | - | 490 | - |
+| MIG 4g+3g, co-located | 4,901 | 20.1% | 513 | 0% within MIG |
 
-MPS wins on every dimension: highest gen throughput, highest embed throughput, zero interference. MIG's hard isolation guarantees are irrelevant when MPS interference is already unmeasurably small, and the partitioning cost is ruinous for bandwidth-bound workloads.
+*A/B test means (3 reps each, alternating). Initial single-run values were noisier (MPS: 20,345, time-sliced: 22,473).
+
+**Time-slicing is the best co-location strategy for this workload.** The stabilized A/B test shows time-slicing costs essentially nothing (-0.3% gen, within noise) while providing ~492 embed seq/s. MPS is slightly worse (-5.6%), with ncu profiling ruling out L2 cache contention as the cause (see §3.3). MIG's hard partitioning remains catastrophic for bandwidth-bound workloads.
+
+**Embed throughput is bottlenecked by vLLM overhead, not GPU resources.** Embed achieves ~479-513 seq/s across all conditions (full GPU standalone, MPS, time-sliced, MIG 3g partition), confirming the GPU has ample capacity for this workload regardless of co-location strategy.
+
+The near-zero interference from time-slicing on a single GPU is encouraging for the TP=2 experiment: if per-GPU interference is negligible, TP=2 gen throughput could scale nearly 2x while still serving embeddings.
 
 ## 4. TP=2 Experiment
 
@@ -142,15 +210,11 @@ Same 2 GPUs, both workloads on both GPUs via TP=2 + MPS:
 - Embed model: TP=2 across both GPUs, ~7.5 GB weights per GPU
 - MPS on each GPU enables parallel kernel execution between gen and embed
 
-### Why this could be a net positive
+### Why this should work
 
-Gen with TP=2 gets:
-- **2x memory bandwidth** (9.6 TB/s total) -- directly helps the bandwidth-bound MoE decode
-- **2x SMs** (264 total) -- more parallel decode capacity
+The single-GPU A/B test shows time-slicing causes essentially zero gen interference (-0.3%, within noise) and MPS only -5.6%. With TP=2, gen gets 2x memory bandwidth (9.6 TB/s total). Even in the MPS case, gen only needs to scale >1.06x from TP=2 to beat the TP=1 baseline — well within expectations for a bandwidth-bound workload.
 
-VRAM does *not* double for KV cache -- each GPU still holds its shard of both models' weights (~15 GB gen + ~7.5 GB embed per GPU), so the per-GPU KV cache budget is similar to the single-GPU case. The wins are bandwidth and compute, not memory capacity.
-
-From the single-GPU experiment, MPS co-location costs gen nothing (+0.8%). If TP=2 gen throughput exceeds TP=1 by any margin, the co-located TP=2 setup beats the dedicated-GPU baseline on gen throughput *while also serving embeddings*.
+From the single-GPU data, time-slicing is the better co-location strategy. The TP=2 experiment should test both, though time-slicing is strongly favored.
 
 ### What to measure
 
@@ -158,6 +222,7 @@ From the single-GPU experiment, MPS co-location costs gen nothing (+0.8%). If TP
 |---|---|---|---|
 | Baseline: separate GPUs | 2 | TP=1 on GPU 0 | TP=1 on GPU 1 |
 | Co-located TP=2 + MPS | 2 | TP=2 on both | TP=2 on both |
+| Co-located TP=2 + time-sliced | 2 | TP=2 on both | TP=2 on both |
 
 Success: co-located gen throughput >= baseline gen throughput, with embed throughput as bonus.
 

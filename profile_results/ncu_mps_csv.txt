@@ -1,0 +1,3 @@
+==WARNING== Note: Running with unmodified GPU clocks. If not controlled otherwise, profiling results may be inconsistent.
+==PROF== Connected to process 58 (/usr/bin/python3.12)
+==ERROR== Profiling is not supported with Multi-Process Server (MPS) enabled on device 0.

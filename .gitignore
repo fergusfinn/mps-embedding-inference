@@ -6,3 +6,13 @@ venv/
 *.nsys-rep
 *.sqlite
 *.qdstrm
+
+# Old experiment result directories (keep only the canonical run)
+results/colocate_*/
+results/cudagraphs_*/
+results/dmon_*/
+results/h200_moe_*/
+results/mig_*/
+results/nsys_*/
+results/split_*/
+results/experiment_20260213_1[0-2]*/
