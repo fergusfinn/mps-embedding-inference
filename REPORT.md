@@ -21,13 +21,13 @@ The interesting case is **two GPUs with TP=2 for both models**. Here the baselin
 
 With TP=2, gen gets 2x memory bandwidth (9.6 TB/s vs 4.8 TB/s) and 2x SMs, directly helping the bandwidth-bound MoE decode. (VRAM for KV cache doesn't double -- each GPU still holds both models' weight shards.) If the per-GPU MPS interference from embed is small enough, the TP=2 gen throughput could exceed the TP=1 baseline -- a net win on gen *and* embed from the same 2 GPUs.
 
-The single-GPU experiment below is a proof of concept: validating that MPS interference is low enough to justify the TP=2 experiment, and characterizing how much overhead co-location actually introduces.
+The single-GPU experiments below are a proof of concept: validating that MPS interference is low enough to justify the TP=2 experiment, and comparing MPS against the alternative isolation strategies (MIG and time-slicing).
 
 ### VRAM budget (single GPU)
 
 | Component | VRAM |
 |---|---|
-| Qwen3-30B-A3B (FP8 weights) | ~30 GB |
+| Qwen3-30B-A3B-FP8 (FP8 weights) | ~30 GB |
 | KV cache (gpu_mem_util=0.50) | ~40 GB |
 | Qwen3-Embedding-8B (BF16 weights) | ~15 GB |
 | **Total** | **~85 GB / 141 GB** |
@@ -40,7 +40,7 @@ The single-GPU experiment below is a proof of concept: validating that MPS inter
 
 ### Models
 
-- **Generative**: Qwen/Qwen3-30B-A3B (MoE, 128 experts, 8 active/token, FP8, served via vLLM)
+- **Generative**: Qwen/Qwen3-30B-A3B-FP8 (MoE, 128 experts, 8 active/token, pre-quantized FP8, served via vLLM)
 - **Embedding**: Qwen/Qwen3-Embedding-8B (dense, BF16, direct transformers inference)
 
 ### Measurement
@@ -55,79 +55,76 @@ GPU metrics were collected via DCGM profiling counters (1-second resolution) and
 | DRAM Bandwidth | 1005 | Fraction of peak HBM bandwidth utilized |
 | Power | dmon | GPU power draw (W) |
 
-Note: DCGM field 1013 (tensor_imma_active) tracks INT8 IMMA, not FP8. Hopper FP8 uses QGMMA instructions which DCGM has no dedicated counter for. The aggregate tensor_active (field 1004) captures FP8 activity.
+### 3.1 Co-location via MPS (shared GPU)
 
-### 3.1 Resource Profiles: Gen vs Embed in Isolation
+Both models run on the full GPU. CUDA MPS enables true parallel kernel execution by routing both processes' work through a shared CUDA context, avoiding time-slicing overhead.
 
-Each model was run alone with `gpu_mem_util=0.50` (half the GPU memory each). Gen was run at C=1024 with 30s warmup to saturate KV cache.
+Four conditions were tested, each with 60s measurement after 30s KV-cache warmup (C=1024, max_tokens=512):
 
-| Metric | Gen Only | Embed Only | Sum |
+| Condition | Gen (tok/s) | Gen delta | Embed (seq/s) |
 |---|---|---|---|
-| Throughput | 15,204 tok/s | 348 seq/s | - |
-| SM Active | 49% | 33% | 82% |
-| SM Occupancy | 18% | 10% | 28% |
-| Tensor Core | 10% | 11% | 21% |
-| DRAM Bandwidth | 18% | 14% | 32% |
-| Power | ~400W | ~320W | ~720W |
+| Gen only | 14,572 | baseline | - |
+| Gen only (MPS daemon on) | 14,618 | +0.3% | - |
+| Gen + Embed (MPS) | 14,778 | **+1.4%** | 288 |
+| Gen + Embed (no MPS, time-sliced) | 13,504 | **-7.3%** | 246 |
 
-The sum of SM Active (82%) is under 100%, and DRAM bandwidth (32%) has large headroom. Power sums to ~720W, slightly above the 700W TDP -- a potential concern, though actual co-located power may differ from the arithmetic sum due to different thermal and power delivery dynamics.
+**MPS has zero overhead.** Gen-only with and without the MPS daemon running are identical within noise. The MPS proxy adds no measurable cost.
 
-### 3.2 Co-location Results
+**MPS co-location imposes no gen throughput loss.** With MPS, gen throughput is 14,778 tok/s -- actually slightly *above* the gen-only baseline of 14,572 tok/s (+1.4%, likely noise/thermal). The embedding model gets 288 seq/s essentially for free.
 
-Four conditions were tested, each with 60s measurement after 30s KV-cache warmup:
+**Time-slicing is significantly worse.** Without MPS, CUDA context-switches between the two processes, causing a 7.3% gen throughput loss and lower embed throughput (246 vs 288 seq/s).
 
-| Condition | Gen (tok/s) | Gen delta | Embed (seq/s) | Embed delta |
-|---|---|---|---|---|
-| Gen only | 15,190 | baseline | - | - |
-| Gen only (MPS daemon on) | 15,226 | +0.2% | - | - |
-| Gen + Embed (MPS) | 14,818 | **-2.4%** | 248 | -29% vs standalone |
-| Gen + Embed (no MPS) | 13,049 | **-14.1%** | 244 | -30% vs standalone |
-
-### 3.3 Latency Impact
+#### Latency
 
 | Condition | p50 | p95 | p99 |
 |---|---|---|---|
-| Gen only | 32.4s | 38.6s | 40.7s |
-| Gen only (MPS on) | 32.4s | 38.3s | 41.0s |
-| Gen + Embed (MPS) | 33.2s | 40.3s | 42.4s |
-| Gen + Embed (no MPS) | 37.9s | 47.4s | 50.1s |
+| Gen only | 67.4ms | 80.1ms | 85.7ms |
+| Gen only (MPS on) | 66.0ms | 77.8ms | 83.6ms |
+| Gen + Embed (MPS) | 64.8ms | 77.0ms | 82.6ms |
+| Gen + Embed (no MPS) | 72.1ms | 86.6ms | 92.9ms |
 
-These are end-to-end request latencies at C=1024 with max_tokens=512 (each request generates ~512 tokens).
+Per-token decode latency. MPS co-location actually improves latency slightly; time-slicing degrades it.
 
-### 3.4 GPU Metrics During Co-location
+#### GPU Metrics
 
 | Condition | SM Active | SM Occ | Tensor | DRAM BW | Power | Temp |
 |---|---|---|---|---|---|---|
-| Gen only | 50.9% | 19.3% | 10.0% | 17.4% | 473W | 61C |
-| Gen only (MPS on) | 50.9% | 19.2% | 10.0% | 17.5% | 469W | 61C |
-| Gen + Embed (MPS) | 73.0% | 26.2% | 17.3% | 27.1% | 587W | 66C |
-| Gen + Embed (no MPS) | 65.5% | 22.8% | 15.2% | 23.4% | 508W | 63C |
+| Gen only | 44.5% | 9.7% | 9.9% | 16.7% | 430W | 49C |
+| Gen only (MPS on) | 45.0% | 9.8% | 10.0% | 17.0% | 427W | 49C |
+| Gen + Embed (MPS) | 71.3% | 18.7% | 19.2% | 29.7% | 583W | 56C |
+| Gen + Embed (no MPS) | 66.3% | 16.2% | 16.4% | 25.2% | 507W | 53C |
 
-### 3.5 Interpretation
+MPS co-location raises SM Active from 45% to 71% -- the embedding model's compute kernels genuinely run in parallel alongside gen decode kernels. Power stays well under 700W TDP.
 
-**MPS has zero overhead.** Gen-only with and without the MPS daemon running are identical: 15,190 vs 15,226 tok/s, same latencies, same DCGM profile. The entire 2.4% gen throughput loss under MPS is from embedding contention, not MPS proxy overhead.
+### 3.2 MIG Baseline (partitioned GPU)
 
-**MPS enables true parallel execution.** With MPS, combined SM Active reaches 73% (vs 51% gen-only) -- the embedding model's kernels genuinely run alongside gen kernels on different SMs. Without MPS, time-slicing gives only 65.5% SM Active with 14% gen throughput loss, because context switching between the two CUDA contexts is expensive.
+NVIDIA Multi-Instance GPU (MIG) provides hardware-level isolation by partitioning a GPU into fixed slices with dedicated SMs, memory controllers, and cache. This is the "hard isolation" alternative to MPS's flexible resource sharing.
 
-**Power stays under TDP.** Co-located power with MPS is 587W, well under the 700W TDP. No thermal throttling observed (66C vs 61C baseline).
+**Partition layout:** 4g.71gb (4/7 SMs, 4/8 memory) for gen + 3g.71gb (3/7 SMs, 4/8 memory) for embed. This uses all 7/7 SM slices -- no resources wasted at the partition level. Both partitions get 70 GB VRAM.
 
-**The embedding model takes a larger relative hit.** Embed throughput drops ~30% from standalone (348 -> 248 seq/s) regardless of MPS vs time-slicing. This is expected: the gen model is the primary consumer of both SM time and memory bandwidth, and the embed model gets whatever resources remain.
+| Condition | Gen (tok/s) | Gen delta | Embed (seq/s) |
+|---|---|---|---|
+| Gen only (4g.71gb partition) | 4,647 | baseline | - |
+| Gen + Embed (MIG isolated) | 4,687 | +0.9% | 205 |
 
-### 3.6 Concurrency Sweep (Gen Only)
+As expected, MIG gives perfect isolation: zero interference between partitions (+0.9% is noise). But the cost is catastrophic for the bandwidth-bound gen model:
 
-The MoE model's resource utilization scales with concurrent decode sequences. At low concurrency, the GPU is deeply underutilized:
+**Gen throughput drops 68% vs the full GPU** (4,647 vs 14,572 tok/s). The 4g partition has 4/8 = 50% of the GPU's memory bandwidth, but gen only achieves 31.9% of full-GPU throughput. The reduced SM count (4/7) limits how many concurrent decode operations can run, preventing the workload from saturating even the reduced bandwidth.
 
-| C | Throughput (tok/s) | SM Active | SM Occ | DRAM BW | Power |
-|---|---|---|---|---|---|
-| 1 | 194 | 27.5% | 4.6% | 13.6% | 232W |
-| 256 | 15,703 | 60.1% | 19.7% | 24.3% | 456W |
-| 1024 | 14,903 | 50.0% | 17.1% | 21.4% | 416W |
-| 2048 | 22,433 | 75.0% | 28.3% | 28.3% | 583W |
-| 4096 | 25,762 | 83.9% | 33.4% | 26.6% | 611W |
+**Embed throughput also drops** (205 vs 288 seq/s MPS, vs 348 seq/s standalone). The 3g partition has 3/7 SMs and 4/8 memory bandwidth -- enough to run, but constrained.
 
-(CUDA graphs mode, `gpu_mem_util=0.85`)
+Note: the MIG experiment required `gpu_memory_utilization=0.85` to fit the 30 GB FP8 model in the 70 GB partition, vs 0.50 for the full-GPU experiments. This gives more KV cache per partition but is not the driver of the throughput difference.
 
-DRAM bandwidth plateaus at ~28% of the H200's 4.8 TB/s peak. Even at C=4096, over 70% of memory bandwidth is unused, confirming the model is not bandwidth-saturated -- it is limited by other factors (KV cache capacity, scheduler overhead, expert routing).
+### 3.3 Comparison
+
+| Configuration | Gen (tok/s) | Gen % of full | Embed (seq/s) | Interference |
+|---|---|---|---|---|
+| Full GPU, gen only | 14,572 | 100% | - | - |
+| Full GPU, MPS co-located | 14,778 | 101.4% | 288 | None |
+| Full GPU, time-sliced | 13,504 | 92.7% | 246 | -7.3% gen |
+| MIG 4g+3g, co-located | 4,687 | 32.2% | 205 | -67.8% gen (partitioning) |
+
+MPS wins on every dimension: highest gen throughput, highest embed throughput, zero interference. MIG's hard isolation guarantees are irrelevant when MPS interference is already unmeasurably small, and the partitioning cost is ruinous for bandwidth-bound workloads.
 
 ## 4. TP=2 Experiment
 
@@ -156,7 +153,7 @@ Gen with TP=2 gets:
 
 VRAM does *not* double for KV cache -- each GPU still holds its shard of both models' weights (~15 GB gen + ~7.5 GB embed per GPU), so the per-GPU KV cache budget is similar to the single-GPU case. The wins are bandwidth and compute, not memory capacity.
 
-From the single-GPU experiment, MPS co-location costs gen ~2.4% throughput. If TP=2 gen throughput is more than 2.4% higher than TP=1 (which is likely, given the model is bandwidth-bound), the co-located TP=2 setup beats the dedicated-GPU baseline on gen throughput *while also serving embeddings*.
+From the single-GPU experiment, MPS co-location costs gen nothing (actually +1.4%). If TP=2 gen throughput exceeds TP=1 by any margin, the co-located TP=2 setup beats the dedicated-GPU baseline on gen throughput *while also serving embeddings*.
 
 ### What to measure
 

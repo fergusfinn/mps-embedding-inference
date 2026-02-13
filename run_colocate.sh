@@ -9,7 +9,7 @@ set -euo pipefail
 
 GPU_ID=0
 VLLM_PORT=8100
-GEN_MODEL="${1:-Qwen/Qwen3-30B-A3B}"
+GEN_MODEL="${1:-Qwen/Qwen3-30B-A3B-FP8}"
 EMBED_MODEL="Qwen/Qwen3-Embedding-8B"
 GEN_MEM_UTIL=0.50
 GEN_CONCURRENCY=1024
@@ -119,7 +119,6 @@ start_vllm() {
         --model "$GEN_MODEL" --port "$VLLM_PORT" \
         --gpu-memory-utilization $GEN_MEM_UTIL --max-model-len 4096 \
         --max-num-seqs "$GEN_CONCURRENCY" \
-        --quantization fp8 \
         --disable-log-requests \
         > "$RESULTS_DIR/vllm_${1}.log" 2>&1 &
     VLLM_PID=$!
