@@ -150,12 +150,13 @@ def kernel_duration_stats(kernels):
     }
 
 
-def theoretical_occupancy(kernels, num_sms=128):
+def theoretical_occupancy(kernels, num_sms=132):
     """Estimate theoretical SM occupancy from grid dimensions.
 
     Each block occupies one SM slot. If a kernel launches N blocks,
     it can occupy min(N, num_sms) SMs. This is a rough upper bound --
     actual occupancy depends on registers, shared memory, and warp limits.
+    Default num_sms=132 for H100/H200 (Hopper). Use 128 for RTX 4090.
     """
     if not kernels:
         return {"mean_blocks": 0, "mean_sm_frac": 0}
@@ -165,6 +166,45 @@ def theoretical_occupancy(kernels, num_sms=128):
         "mean_blocks": np.mean(blocks),
         "mean_sm_frac": np.mean(sm_frac),
     }
+
+
+def categorize_kernel(name):
+    """Categorize a kernel by its function in the model pipeline."""
+    name_lower = name.lower()
+    if any(k in name_lower for k in ["moe", "expert", "topk", "gate", "routing", "permute"]):
+        return "moe"
+    if any(k in name_lower for k in ["attention", "attn", "flash", "fmha", "sdpa"]):
+        return "attention"
+    if any(k in name_lower for k in ["gemm", "cutlass", "cublas", "matmul", "linear", "sgemm", "hgemm"]):
+        return "gemm"
+    if any(k in name_lower for k in ["layernorm", "rmsnorm", "norm"]):
+        return "norm"
+    if any(k in name_lower for k in ["elementwise", "activation", "silu", "gelu", "relu", "add_"]):
+        return "activation"
+    if any(k in name_lower for k in ["copy", "memcpy", "memset", "transpose", "reshape", "cast"]):
+        return "memory"
+    return "other"
+
+
+def kernel_category_breakdown(kernels):
+    """Break down kernels by category and report time distribution."""
+    categories = {}
+    for k in kernels:
+        cat = categorize_kernel(k["name"])
+        if cat not in categories:
+            categories[cat] = {"count": 0, "total_ns": 0}
+        categories[cat]["count"] += 1
+        categories[cat]["total_ns"] += k["duration"]
+
+    total_ns = sum(c["total_ns"] for c in categories.values())
+    result = {}
+    for cat, data in sorted(categories.items(), key=lambda x: -x[1]["total_ns"]):
+        result[cat] = {
+            "count": data["count"],
+            "total_ms": data["total_ns"] / 1e6,
+            "pct": (data["total_ns"] / total_ns * 100) if total_ns > 0 else 0,
+        }
+    return result
 
 
 def analyze_step(label, gen_profile, embed_profile=None):
@@ -186,7 +226,14 @@ def analyze_step(label, gen_profile, embed_profile=None):
     print(f"  Gen kernels: {gen_stats['count']}")
     print(f"  Gen kernel duration: mean={gen_stats['mean_us']:.1f}us  median={gen_stats['median_us']:.1f}us  p99={gen_stats['p99_us']:.1f}us")
     print(f"  Gen total kernel time: {gen_stats['total_ms']:.1f}ms")
-    print(f"  Gen theoretical SM occupancy: {gen_occ['mean_sm_frac']*100:.1f}% (mean {gen_occ['mean_blocks']:.0f} blocks/kernel, 128 SMs)")
+    print(f"  Gen theoretical SM occupancy: {gen_occ['mean_sm_frac']*100:.1f}% (mean {gen_occ['mean_blocks']:.0f} blocks/kernel, 132 SMs)")
+
+    # MoE kernel categorization
+    gen_cats = kernel_category_breakdown(gen_kernels)
+    if gen_cats:
+        print(f"  Gen kernel breakdown:")
+        for cat, data in gen_cats.items():
+            print(f"    {cat:12s}: {data['count']:6d} kernels, {data['total_ms']:8.1f}ms ({data['pct']:5.1f}%)")
 
     if embed_profile and os.path.exists(embed_profile):
         embed_kernels = read_gpu_trace(embed_profile)
