@@ -19,7 +19,7 @@ The interesting case is **two GPUs with TP=2 for both models**. Here the baselin
 - **Baseline**: 2 GPUs, gen on GPU 0 (TP=1), embed on GPU 1 (TP=1)
 - **Experiment**: 2 GPUs, gen across both (TP=2) + embed across both (TP=2) via MPS
 
-With TP=2, gen gets 2x memory bandwidth (9.6 TB/s vs 4.8 TB/s), directly helping the bandwidth-bound MoE decode. It also gets 2x VRAM for KV cache (more concurrent sequences) and 2x SMs. If the per-GPU MPS interference from embed is small enough, the TP=2 gen throughput could exceed the TP=1 baseline -- a net win on gen *and* embed from the same 2 GPUs.
+With TP=2, gen gets 2x memory bandwidth (9.6 TB/s vs 4.8 TB/s) and 2x SMs, directly helping the bandwidth-bound MoE decode. (VRAM for KV cache doesn't double -- each GPU still holds both models' weight shards.) If the per-GPU MPS interference from embed is small enough, the TP=2 gen throughput could exceed the TP=1 baseline -- a net win on gen *and* embed from the same 2 GPUs.
 
 The single-GPU experiment below is a proof of concept: validating that MPS interference is low enough to justify the TP=2 experiment, and characterizing how much overhead co-location actually introduces.
 
@@ -152,8 +152,9 @@ Same 2 GPUs, both workloads on both GPUs via TP=2 + MPS:
 
 Gen with TP=2 gets:
 - **2x memory bandwidth** (9.6 TB/s total) -- directly helps the bandwidth-bound MoE decode
-- **2x VRAM for KV cache** -- more concurrent sequences before saturation
 - **2x SMs** (264 total) -- more parallel decode capacity
+
+VRAM does *not* double for KV cache -- each GPU still holds its shard of both models' weights (~15 GB gen + ~7.5 GB embed per GPU), so the per-GPU KV cache budget is similar to the single-GPU case. The wins are bandwidth and compute, not memory capacity.
 
 From the single-GPU experiment, MPS co-location costs gen ~2.4% throughput. If TP=2 gen throughput is more than 2.4% higher than TP=1 (which is likely, given the model is bandwidth-bound), the co-located TP=2 setup beats the dedicated-GPU baseline on gen throughput *while also serving embeddings*.
 
