@@ -1,155 +1,0 @@
-WARNING: CPU IP/backtrace sampling not supported, disabling.
-Try the 'nsys status --environment' command to learn more.
-
-WARNING: CPU context switch tracing not supported, disabling.
-Try the 'nsys status --environment' command to learn more.
-
-2026-02-12 12:08:29.613062: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2026-02-12 12:08:29.623387: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1770898109.634093  547372 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1770898109.637251  547372 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1770898109.645860  547372 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898109.645869  547372 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898109.645871  547372 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898109.645872  547372 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2026-02-12 12:08:29.648232: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX512F AVX512_VNNI AVX512_BF16, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
-  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325] 
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325]        █     █     █▄   ▄█
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325]   █▄█▀ █     █     █     █  model   NousResearch/Meta-Llama-3.1-8B-Instruct
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:325] 
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:32 [utils.py:261] non-default args: {'port': 8100, 'model': 'NousResearch/Meta-Llama-3.1-8B-Instruct', 'max_model_len': 2048, 'gpu_memory_utilization': 0.85}
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:33 [model.py:541] Resolved architecture: LlamaForCausalLM
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:33 [model.py:1561] Using max model len 2048
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:33 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=2048.
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:33 [vllm.py:624] Asynchronous scheduling is enabled.
-2026-02-12 12:08:36.568266: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1770898116.579495  549439 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1770898116.582673  549439 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1770898116.590913  549439 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898116.590922  549439 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898116.590924  549439 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770898116.590925  549439 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
-  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:39 [core.py:96] Initializing a V1 LLM engine (v0.15.1) with config: model='NousResearch/Meta-Llama-3.1-8B-Instruct', speculative_config=None, tokenizer='NousResearch/Meta-Llama-3.1-8B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=NousResearch/Meta-Llama-3.1-8B-Instruct, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': None, 'static_all_moe_layers': []}
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:40 [parallel_state.py:1270] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.9.30.25:56553 backend=nccl
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:40 [parallel_state.py:1481] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:41 [gpu_model_runner.py:4033] Starting to load model NousResearch/Meta-Llama-3.1-8B-Instruct...
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:41 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:00<00:01,  2.23it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:01<00:01,  1.95it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:01<00:00,  1.90it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:01<00:00,  2.48it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:01<00:00,  2.27it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m 
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:44 [default_loader.py:291] Loading weights took 1.79 seconds
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:45 [gpu_model_runner.py:4130] Model loading took 14.99 GiB memory and 2.854089 seconds
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:48 [backends.py:812] Using cache directory: /home/fergus/.cache/vllm/torch_compile_cache/a526ae1bf8/rank_0_0/backbone for vLLM's torch.compile
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:48 [backends.py:872] Dynamo bytecode transform time: 2.80 s
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:50 [backends.py:267] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.228 s
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:50 [monitor.py:34] torch.compile takes 4.02 s in total
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:51 [gpu_worker.py:368] Available KV cache memory: 3.78 GiB
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:51 [kv_cache_utils.py:1307] GPU KV cache size: 30,976 tokens
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:51 [kv_cache_utils.py:1312] Maximum concurrency for 2,048 tokens per request: 15.12x
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:03, 16.04it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   8%|▊         | 4/51 [00:00<00:02, 16.21it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:02, 16.28it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  16%|█▌        | 8/51 [00:00<00:02, 16.78it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  20%|█▉        | 10/51 [00:00<00:02, 17.76it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:00<00:02, 18.77it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  31%|███▏      | 16/51 [00:00<00:01, 19.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:00<00:01, 21.22it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  43%|████▎     | 22/51 [00:01<00:01, 22.43it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 25/51 [00:01<00:01, 23.29it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  55%|█████▍    | 28/51 [00:01<00:00, 24.10it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 31/51 [00:01<00:00, 25.18it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  67%|██████▋   | 34/51 [00:01<00:00, 26.47it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  75%|███████▍  | 38/51 [00:01<00:00, 28.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  80%|████████  | 41/51 [00:01<00:00, 28.20it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 45/51 [00:01<00:00, 29.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  96%|█████████▌| 49/51 [00:02<00:00, 29.89it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:02<00:00, 24.08it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:01, 22.07it/s]Capturing CUDA graphs (decode, FULL):  17%|█▋        | 6/35 [00:00<00:01, 24.61it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:00<00:01, 25.84it/s]Capturing CUDA graphs (decode, FULL):  34%|███▍      | 12/35 [00:00<00:00, 26.51it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:00<00:00, 27.51it/s]Capturing CUDA graphs (decode, FULL):  54%|█████▍    | 19/35 [00:00<00:00, 29.16it/s]Capturing CUDA graphs (decode, FULL):  66%|██████▌   | 23/35 [00:00<00:00, 30.02it/s]Capturing CUDA graphs (decode, FULL):  77%|███████▋  | 27/35 [00:00<00:00, 30.13it/s]Capturing CUDA graphs (decode, FULL):  89%|████████▊ | 31/35 [00:01<00:00, 31.44it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:01<00:00, 32.78it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:01<00:00, 29.70it/s]
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:55 [gpu_model_runner.py:5063] Graph capturing finished in 4 secs, took 0.57 GiB
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:55 [core.py:272] init engine (profile, create kv cache, warmup model) took 10.77 seconds
-[0;36m(EngineCore_DP0 pid=549439)[0;0m INFO 02-12 12:08:57 [vllm.py:624] Asynchronous scheduling is enabled.
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:57 [api_server.py:665] Supported tasks: ['generate']
-[0;36m(APIServer pid=547372)[0;0m WARNING 02-12 12:08:57 [model.py:1371] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'temperature': 0.6, 'top_p': 0.9}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:57 [serving.py:177] Warming up chat template processing...
-[0;36m(APIServer pid=547372)[0;0m Could not cache non-existence of file. Will ignore error and continue. Error: [Errno 13] Permission denied: '/home/fergus/.cache/huggingface/hub/models--NousResearch--Meta-Llama-3.1-8B-Instruct/.no_exist/d10aef7999a2b5ba950ab3974312feeedbfe0b77/processor_config.json'
-[0;36m(APIServer pid=547372)[0;0m [2026-02-12 12:08:57] ERROR file_download.py:1563: Could not cache non-existence of file. Will ignore error and continue. Error: [Errno 13] Permission denied: '/home/fergus/.cache/huggingface/hub/models--NousResearch--Meta-Llama-3.1-8B-Instruct/.no_exist/d10aef7999a2b5ba950ab3974312feeedbfe0b77/processor_config.json'
-[0;36m(APIServer pid=547372)[0;0m Could not cache non-existence of file. Will ignore error and continue. Error: [Errno 13] Permission denied: '/home/fergus/.cache/huggingface/hub/models--NousResearch--Meta-Llama-3.1-8B-Instruct/.no_exist/d10aef7999a2b5ba950ab3974312feeedbfe0b77/video_preprocessor_config.json'
-[0;36m(APIServer pid=547372)[0;0m [2026-02-12 12:08:57] ERROR file_download.py:1563: Could not cache non-existence of file. Will ignore error and continue. Error: [Errno 13] Permission denied: '/home/fergus/.cache/huggingface/hub/models--NousResearch--Meta-Llama-3.1-8B-Instruct/.no_exist/d10aef7999a2b5ba950ab3974312feeedbfe0b77/video_preprocessor_config.json'
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:58 [hf.py:310] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:58 [serving.py:212] Chat template warmup completed in 1289.8ms
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [api_server.py:946] Starting vLLM API server 0 on http://0.0.0.0:8100
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:38] Available routes are:
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /openapi.json, Methods: HEAD, GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /docs, Methods: HEAD, GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: HEAD, GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /redoc, Methods: HEAD, GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /tokenize, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /detokenize, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /pause, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /resume, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /is_paused, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /metrics, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /health, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/responses, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/audio/transcriptions, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/audio/translations, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/completions, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/completions/render, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/messages, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/models, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /load, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /version, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /ping, Methods: GET
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /ping, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /invocations, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /classify, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/embeddings, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /score, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/score, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /rerank, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v1/rerank, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /v2/rerank, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:08:59 [launcher.py:46] Route: /pooling, Methods: POST
-[0;36m(APIServer pid=547372)[0;0m INFO:     Started server process [547372]
-[0;36m(APIServer pid=547372)[0;0m INFO:     Waiting for application startup.
-[0;36m(APIServer pid=547372)[0;0m INFO:     Application startup complete.
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37250 - "GET /health HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:37254 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:09 [loggers.py:257] Engine 000: Avg prompt throughput: 12.4 tokens/s, Avg generation throughput: 27.2 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 53.3%
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:34274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:34274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:19 [loggers.py:257] Engine 000: Avg prompt throughput: 7.5 tokens/s, Avg generation throughput: 30.1 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.2%, Prefix cache hit rate: 56.9%
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:34274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:29 [loggers.py:257] Engine 000: Avg prompt throughput: 2.5 tokens/s, Avg generation throughput: 22.3 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.1%, Prefix cache hit rate: 57.6%
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:39 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 22.3 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.8%, Prefix cache hit rate: 57.6%
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:34274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:49 [loggers.py:257] Engine 000: Avg prompt throughput: 2.5 tokens/s, Avg generation throughput: 22.2 tokens/s, Running: 1 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.7%, Prefix cache hit rate: 58.2%
-[0;36m(APIServer pid=547372)[0;0m INFO:     127.0.0.1:34274 - "POST /v1/completions HTTP/1.1" 200 OK
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:09:59 [loggers.py:257] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 6.5 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 58.2%
-[0;36m(APIServer pid=547372)[0;0m INFO 02-12 12:10:02 [launcher.py:110] Shutting down FastAPI HTTP server.
-[0;36m(APIServer pid=547372)[0;0m INFO:     Shutting down
-[0;36m(APIServer pid=547372)[0;0m INFO:     Waiting for application shutdown.
-[0;36m(APIServer pid=547372)[0;0m INFO:     Application shutdown complete.
-Collecting data...
-Generating '/tmp/nsys-report-c1be.qdstrm'
-[1/1] [0%                          ] step2_gen_profile.nsys-rep[1/1] [0%                          ] step2_gen_profile.nsys-rep[1/1] [==18%                       ] step2_gen_profile.nsys-rep[1/1] [==20%                       ] step2_gen_profile.nsys-rep[1/1] [==21%                       ] step2_gen_profile.nsys-rep[1/1] [=17%                        ] step2_gen_profile.nsys-rep[1/1] [=15%                        ] step2_gen_profile.nsys-rep[1/1] [=16%                        ] step2_gen_profile.nsys-rep[1/1] [=17%                        ] step2_gen_profile.nsys-rep[1/1] [==18%                       ] step2_gen_profile.nsys-rep[1/1] [=16%                        ] step2_gen_profile.nsys-rep[1/1] [=17%                        ] step2_gen_profile.nsys-rep[1/1] [==18%                       ] step2_gen_profile.nsys-rep[1/1] [=====29%                    ] step2_gen_profile.nsys-rep[1/1] [=====30%                    ] step2_gen_profile.nsys-rep[1/1] [=====31%                    ] step2_gen_profile.nsys-rep[1/1] [=====32%                    ] step2_gen_profile.nsys-rep[1/1] [======33%                   ] step2_gen_profile.nsys-rep[1/1] [======34%                   ] step2_gen_profile.nsys-rep[1/1] [======35%                   ] step2_gen_profile.nsys-rep[1/1] [=======36%                  ] step2_gen_profile.nsys-rep[1/1] [=======37%                  ] step2_gen_profile.nsys-rep[1/1] [=======38%                  ] step2_gen_profile.nsys-rep[1/1] [=======39%                  ] step2_gen_profile.nsys-rep[1/1] [========40%                 ] step2_gen_profile.nsys-rep[1/1] [========41%                 ] step2_gen_profile.nsys-rep[1/1] [===========53%              ] step2_gen_profile.nsys-rep[1/1] [============54%             ] step2_gen_profile.nsys-rep[1/1] [===============66%          ] step2_gen_profile.nsys-rep[1/1] [==================77%       ] step2_gen_profile.nsys-rep[1/1] [=====================88%    ] step2_gen_profile.nsys-rep[1/1] [=====================89%    ] step2_gen_profile.nsys-rep[1/1] [========================100%] step2_gen_profile.nsys-rep[1/1] [========================100%] step2_gen_profile.nsys-rep
-Generated:
-    /home/fergus/mps-embedding-inference/results/llama8b_20260212_120649/step2_gen_profile.nsys-rep

@@ -1,0 +1,12 @@
+Warming up...
+Benchmarking for 60s with 64 concurrent requests, batch_size=8...
+
+=== Embedding Benchmark Results ===
+Duration: 61.0s
+Total requests: 3621
+Total sequences: 28968
+Throughput: 474.6 sequences/sec
+Batch size: 8
+
+--- Per-request latency ---
+  p50: 1102.0ms  p95: 1274.5ms  p99: 1349.8ms

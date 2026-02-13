@@ -1,293 +1,0 @@
-2026-02-12 09:53:30.860987: I tensorflow/core/util/port.cc:153] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2026-02-12 09:53:30.878571: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1770890010.900237 3770926 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1770890010.906594 3770926 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1770890010.924760 3770926 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890010.924814 3770926 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890010.924817 3770926 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890010.924819 3770926 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-2026-02-12 09:53:30.929629: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
-To enable the following instructions: AVX512F AVX512_VNNI AVX512_BF16, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
-  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325] 
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325]        █     █     █▄   ▄█
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.15.1
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325]   █▄█▀ █     █     █     █  model   NousResearch/Meta-Llama-3.1-8B-Instruct
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:325] 
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:37 [utils.py:261] non-default args: {'port': 8100, 'model': 'NousResearch/Meta-Llama-3.1-8B-Instruct', 'max_model_len': 2048, 'gpu_memory_utilization': 0.85}
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:38 [model.py:541] Resolved architecture: LlamaForCausalLM
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:38 [model.py:1561] Using max model len 2048
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:38 [scheduler.py:226] Chunked prefill is enabled with max_num_batched_tokens=2048.
-[0;36m(APIServer pid=3770926)[0;0m INFO 02-12 09:53:38 [vllm.py:624] Asynchronous scheduling is enabled.
-2026-02-12 09:53:48.370134: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
-E0000 00:00:1770890028.392203 3771773 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-E0000 00:00:1770890028.399140 3771773 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-W0000 00:00:1770890028.416765 3771773 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890028.416830 3771773 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890028.416832 3771773 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-W0000 00:00:1770890028.416834 3771773 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-/usr/lib/python3/dist-packages/scipy/__init__.py:146: UserWarning: A NumPy version >=1.17.3 and <1.25.0 is required for this version of SciPy (detected version 1.26.4
-  warnings.warn(f"A NumPy version >={np_minversion} and <{np_maxversion}"
-AttributeError: 'MessageFactory' object has no attribute 'GetPrototype'
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:53:55 [core.py:96] Initializing a V1 LLM engine (v0.15.1) with config: model='NousResearch/Meta-Llama-3.1-8B-Instruct', speculative_config=None, tokenizer='NousResearch/Meta-Llama-3.1-8B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, disable_custom_all_reduce=False, quantization=None, enforce_eager=False, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_fallback=False, disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False), seed=0, served_model_name=NousResearch/Meta-Llama-3.1-8B-Instruct, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'level': None, 'mode': <CompilationMode.VLLM_COMPILE: 3>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['none'], 'splitting_ops': ['vllm::unified_attention', 'vllm::unified_attention_with_output', 'vllm::unified_mla_attention', 'vllm::unified_mla_attention_with_output', 'vllm::mamba_mixer2', 'vllm::mamba_mixer', 'vllm::short_conv', 'vllm::linear_attention', 'vllm::plamo2_mamba_mixer', 'vllm::gdn_attention_core', 'vllm::kda_attention', 'vllm::sparse_attn_indexer', 'vllm::rocm_aiter_sparse_attn_indexer', 'vllm::unified_kv_cache_update'], 'compile_mm_encoder': False, 'compile_sizes': [], 'compile_ranges_split_points': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.FULL_AND_PIECEWISE: (2, 1)>, 'cudagraph_num_of_warmups': 1, 'cudagraph_capture_sizes': [1, 2, 4, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96, 104, 112, 120, 128, 136, 144, 152, 160, 168, 176, 184, 192, 200, 208, 216, 224, 232, 240, 248, 256, 272, 288, 304, 320, 336, 352, 368, 384, 400, 416, 432, 448, 464, 480, 496, 512], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': False, 'fuse_act_quant': False, 'fuse_attn_quant': False, 'eliminate_noops': True, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False}, 'max_cudagraph_capture_size': 512, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': True}, 'local_cache_dir': None, 'static_all_moe_layers': []}
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:53:59 [parallel_state.py:1270] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://10.9.30.25:48037 backend=nccl
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:53:59 [parallel_state.py:1481] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:01 [gpu_model_runner.py:4033] Starting to load model NousResearch/Meta-Llama-3.1-8B-Instruct...
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:02 [cuda.py:364] Using FLASH_ATTN attention backend out of potential backends: ('FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION')
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:01<00:03,  1.29s/it]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:02<00:02,  1.46s/it]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:03<00:01,  1.30s/it]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:04<00:00,  1.11s/it]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:04<00:00,  1.20s/it]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:08 [default_loader.py:291] Loading weights took 4.92 seconds
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:10 [gpu_model_runner.py:4130] Model loading took 14.99 GiB memory and 6.560374 seconds
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:19 [backends.py:812] Using cache directory: /home/fergus/.cache/vllm/torch_compile_cache/a526ae1bf8/rank_0_0/backbone for vLLM's torch.compile
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:19 [backends.py:872] Dynamo bytecode transform time: 8.32 s
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:24 [backends.py:267] Directly load the compiled graph(s) for compile range (1, 2048) from the cache, took 1.628 s
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:24 [monitor.py:34] torch.compile takes 9.95 s in total
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:26 [gpu_worker.py:368] Available KV cache memory: 3.78 GiB
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:26 [kv_cache_utils.py:1307] GPU KV cache size: 30,976 tokens
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:26 [kv_cache_utils.py:1312] Maximum concurrency for 2,048 tokens per request: 15.12x
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   0%|          | 0/51 [00:00<?, ?it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   2%|▏         | 1/51 [00:00<00:05,  8.75it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   4%|▍         | 2/51 [00:00<00:06,  7.79it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):   6%|▌         | 3/51 [00:00<00:05,  8.37it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  10%|▉         | 5/51 [00:00<00:04,  9.85it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  12%|█▏        | 6/51 [00:00<00:04,  9.25it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  14%|█▎        | 7/51 [00:00<00:05,  8.53it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  18%|█▊        | 9/51 [00:00<00:04,  9.94it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  22%|██▏       | 11/51 [00:01<00:03, 10.34it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  25%|██▌       | 13/51 [00:01<00:03,  9.68it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  27%|██▋       | 14/51 [00:01<00:04,  9.22it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  29%|██▉       | 15/51 [00:01<00:03,  9.13it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  33%|███▎      | 17/51 [00:01<00:03, 11.18it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  37%|███▋      | 19/51 [00:01<00:03, 10.61it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  41%|████      | 21/51 [00:02<00:02, 10.28it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  45%|████▌     | 23/51 [00:02<00:02, 10.56it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  49%|████▉     | 25/51 [00:02<00:02, 10.11it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  53%|█████▎    | 27/51 [00:02<00:02, 10.87it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  57%|█████▋    | 29/51 [00:02<00:01, 12.01it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  61%|██████    | 31/51 [00:03<00:01, 10.41it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  65%|██████▍   | 33/51 [00:03<00:01, 10.71it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  69%|██████▊   | 35/51 [00:03<00:01,  9.60it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  73%|███████▎  | 37/51 [00:03<00:01, 11.35it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  76%|███████▋  | 39/51 [00:03<00:01, 11.33it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  80%|████████  | 41/51 [00:03<00:00, 10.72it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  84%|████████▍ | 43/51 [00:04<00:00, 12.29it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  88%|████████▊ | 45/51 [00:04<00:00, 13.16it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  92%|█████████▏| 47/51 [00:04<00:00, 14.14it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE):  96%|█████████▌| 49/51 [00:04<00:00, 13.08it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:04<00:00, 13.16it/s]Capturing CUDA graphs (mixed prefill-decode, PIECEWISE): 100%|██████████| 51/51 [00:04<00:00, 10.92it/s]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Capturing CUDA graphs (decode, FULL):   0%|          | 0/35 [00:00<?, ?it/s]Capturing CUDA graphs (decode, FULL):   3%|▎         | 1/35 [00:00<00:03,  8.81it/s]Capturing CUDA graphs (decode, FULL):   9%|▊         | 3/35 [00:00<00:02, 14.02it/s]Capturing CUDA graphs (decode, FULL):  14%|█▍        | 5/35 [00:00<00:02, 14.48it/s]Capturing CUDA graphs (decode, FULL):  20%|██        | 7/35 [00:00<00:02, 12.12it/s]Capturing CUDA graphs (decode, FULL):  26%|██▌       | 9/35 [00:00<00:02, 11.34it/s]Capturing CUDA graphs (decode, FULL):  31%|███▏      | 11/35 [00:00<00:01, 12.65it/s]Capturing CUDA graphs (decode, FULL):  37%|███▋      | 13/35 [00:01<00:01, 13.42it/s]Capturing CUDA graphs (decode, FULL):  43%|████▎     | 15/35 [00:01<00:01, 12.28it/s]Capturing CUDA graphs (decode, FULL):  49%|████▊     | 17/35 [00:01<00:01, 11.33it/s]Capturing CUDA graphs (decode, FULL):  54%|█████▍    | 19/35 [00:01<00:01,  9.93it/s]Capturing CUDA graphs (decode, FULL):  60%|██████    | 21/35 [00:01<00:01, 10.21it/s]Capturing CUDA graphs (decode, FULL):  66%|██████▌   | 23/35 [00:02<00:01,  8.00it/s]Capturing CUDA graphs (decode, FULL):  71%|███████▏  | 25/35 [00:02<00:01,  9.48it/s]Capturing CUDA graphs (decode, FULL):  77%|███████▋  | 27/35 [00:02<00:00, 10.67it/s]Capturing CUDA graphs (decode, FULL):  83%|████████▎ | 29/35 [00:02<00:00, 10.84it/s]Capturing CUDA graphs (decode, FULL):  91%|█████████▏| 32/35 [00:02<00:00, 14.13it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 17.05it/s]Capturing CUDA graphs (decode, FULL): 100%|██████████| 35/35 [00:02<00:00, 12.15it/s]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:36 [gpu_model_runner.py:5063] Graph capturing finished in 10 secs, took 0.55 GiB
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m INFO 02-12 09:54:36 [core.py:272] init engine (profile, create kv cache, warmup model) took 26.00 seconds
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: de145e0d-3419-41bb-8cd5-b77c1ce77b03)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:54:46] WARNING _http.py:320: '(ReadTimeoutError("HTTPSConnectionPool(host='huggingface.co', port=443): Read timed out. (read timeout=10)"), '(Request ID: de145e0d-3419-41bb-8cd5-b77c1ce77b03)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Retrying in 1s [Retry 1/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:54:46] WARNING _http.py:329: Retrying in 1s [Retry 1/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 350f272e-87d9-455f-8658-42fd4dcdc95d)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:54:57] WARNING _http.py:320: '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 350f272e-87d9-455f-8658-42fd4dcdc95d)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Retrying in 2s [Retry 2/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:54:57] WARNING _http.py:329: Retrying in 2s [Retry 2/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 135cfa55-c3d3-434d-8a60-67ce98dc43b1)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:09] WARNING _http.py:320: '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 135cfa55-c3d3-434d-8a60-67ce98dc43b1)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Retrying in 4s [Retry 3/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:09] WARNING _http.py:329: Retrying in 4s [Retry 3/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: f5f1c944-8d71-4ffc-8e94-e70f47df281b)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:23] WARNING _http.py:320: '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: f5f1c944-8d71-4ffc-8e94-e70f47df281b)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Retrying in 8s [Retry 4/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:23] WARNING _http.py:329: Retrying in 8s [Retry 4/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: c8dbc487-a7cf-4957-b1ff-468cd3a6aea8)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:41] WARNING _http.py:320: '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: c8dbc487-a7cf-4957-b1ff-468cd3a6aea8)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Retrying in 8s [Retry 5/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:41] WARNING _http.py:329: Retrying in 8s [Retry 5/5].
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 62c6fca0-c5bd-4195-a175-1f3f12c6be81)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m [2026-02-12 09:55:59] WARNING _http.py:320: '(MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: 62c6fca0-c5bd-4195-a175-1f3f12c6be81)')' thrown while requesting HEAD https://huggingface.co/NousResearch/Meta-Llama-3.1-8B-Instruct/resolve/main/tokenizer_config.json
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] EngineCore failed to start.
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 204, in _new_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     sock = connection.create_connection(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 60, in create_connection
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] socket.gaierror: [Errno -3] Temporary failure in name resolution
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] The above exception was the direct cause of the following exception:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     response = self._make_request(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     raise new_e
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     self._validate_conn(conn)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     conn.connect()
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 759, in connect
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     self.sock = sock = self._new_conn()
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 211, in _new_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     raise NameResolutionError(self.host, self, e) from e
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] urllib3.exceptions.NameResolutionError: HTTPSConnection(host='huggingface.co', port=443): Failed to resolve 'huggingface.co' ([Errno -3] Temporary failure in name resolution)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] The above exception was the direct cause of the following exception:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     resp = conn.urlopen(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     retries = retries.increment(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 535, in increment
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/models/NousResearch/Meta-Llama-3.1-8B-Instruct (Caused by NameResolutionError("HTTPSConnection(host='huggingface.co', port=443): Failed to resolve 'huggingface.co' ([Errno -3] Temporary failure in name resolution)"))
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] During handling of the above exception, another exception occurred:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 956, in run_engine_core
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 691, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     super().__init__(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 120, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     self.structured_output_manager = StructuredOutputManager(vllm_config)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/structured_output/__init__.py", line 74, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     self.tokenizer = cached_tokenizer_from_config(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/registry.py", line 231, in cached_tokenizer_from_config
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return cached_get_tokenizer(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/registry.py", line 214, in get_tokenizer
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     tokenizer = tokenizer_cls_.from_pretrained(tokenizer_name, *args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/hf.py", line 79, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     tokenizer = AutoTokenizer.from_pretrained(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 1156, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2113, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return cls._from_pretrained(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2395, in _from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     tokenizer = cls._patch_mistral_regex(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2442, in _patch_mistral_regex
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     _is_local or (not _is_local and is_base_mistral(pretrained_model_name_or_path))
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2432, in is_base_mistral
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     model = model_info(model_id)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return fn(*args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 2660, in model_info
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     r = get_session().get(path, headers=headers, timeout=timeout, params=params)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 602, in get
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return self.request("GET", url, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     resp = self.send(prep, **send_kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     r = adapter.send(request, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 96, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     return super().send(request, *args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]   File "/home/fergus/.local/lib/python3.10/site-packages/requests/adapters.py", line 677, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966]     raise ConnectionError(e, request=request)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m ERROR 02-12 09:56:30 [core.py:966] requests.exceptions.ConnectionError: (MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /api/models/NousResearch/Meta-Llama-3.1-8B-Instruct (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: f6383499-72a4-4565-90c9-2618fcdeab33)')
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Process EngineCore_DP0:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 204, in _new_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     sock = connection.create_connection(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/util/connection.py", line 60, in create_connection
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     for res in socket.getaddrinfo(host, port, family, socket.SOCK_STREAM):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/usr/lib/python3.10/socket.py", line 955, in getaddrinfo
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m socket.gaierror: [Errno -3] Temporary failure in name resolution
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m The above exception was the direct cause of the following exception:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 787, in urlopen
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     response = self._make_request(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 488, in _make_request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     raise new_e
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 464, in _make_request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self._validate_conn(conn)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 1093, in _validate_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     conn.connect()
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 759, in connect
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self.sock = sock = self._new_conn()
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connection.py", line 211, in _new_conn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     raise NameResolutionError(self.host, self, e) from e
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m urllib3.exceptions.NameResolutionError: HTTPSConnection(host='huggingface.co', port=443): Failed to resolve 'huggingface.co' ([Errno -3] Temporary failure in name resolution)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m The above exception was the direct cause of the following exception:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/requests/adapters.py", line 644, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     resp = conn.urlopen(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/connectionpool.py", line 841, in urlopen
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     retries = retries.increment(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/urllib3/util/retry.py", line 535, in increment
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     raise MaxRetryError(_pool, url, reason) from reason  # type: ignore[arg-type]
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m urllib3.exceptions.MaxRetryError: HTTPSConnectionPool(host='huggingface.co', port=443): Max retries exceeded with url: /api/models/NousResearch/Meta-Llama-3.1-8B-Instruct (Caused by NameResolutionError("HTTPSConnection(host='huggingface.co', port=443): Failed to resolve 'huggingface.co' ([Errno -3] Temporary failure in name resolution)"))
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m During handling of the above exception, another exception occurred:
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m 
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m Traceback (most recent call last):
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self.run()
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self._target(*self._args, **self._kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 970, in run_engine_core
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     raise e
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 956, in run_engine_core
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     engine_core = EngineCoreProc(*args, engine_index=dp_rank, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 691, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     super().__init__(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core.py", line 120, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self.structured_output_manager = StructuredOutputManager(vllm_config)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/structured_output/__init__.py", line 74, in __init__
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     self.tokenizer = cached_tokenizer_from_config(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/registry.py", line 231, in cached_tokenizer_from_config
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return cached_get_tokenizer(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/registry.py", line 214, in get_tokenizer
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     tokenizer = tokenizer_cls_.from_pretrained(tokenizer_name, *args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/tokenizers/hf.py", line 79, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     tokenizer = AutoTokenizer.from_pretrained(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/models/auto/tokenization_auto.py", line 1156, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return tokenizer_class.from_pretrained(pretrained_model_name_or_path, *inputs, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2113, in from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return cls._from_pretrained(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2395, in _from_pretrained
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     tokenizer = cls._patch_mistral_regex(
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2442, in _patch_mistral_regex
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     _is_local or (not _is_local and is_base_mistral(pretrained_model_name_or_path))
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/transformers/tokenization_utils_base.py", line 2432, in is_base_mistral
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     model = model_info(model_id)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return fn(*args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/hf_api.py", line 2660, in model_info
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     r = get_session().get(path, headers=headers, timeout=timeout, params=params)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 602, in get
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return self.request("GET", url, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 589, in request
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     resp = self.send(prep, **send_kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/requests/sessions.py", line 703, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     r = adapter.send(request, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 96, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     return super().send(request, *args, **kwargs)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/requests/adapters.py", line 677, in send
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m     raise ConnectionError(e, request=request)
-[0;36m(EngineCore_DP0 pid=3771773)[0;0m requests.exceptions.ConnectionError: (MaxRetryError('HTTPSConnectionPool(host=\'huggingface.co\', port=443): Max retries exceeded with url: /api/models/NousResearch/Meta-Llama-3.1-8B-Instruct (Caused by NameResolutionError("HTTPSConnection(host=\'huggingface.co\', port=443): Failed to resolve \'huggingface.co\' ([Errno -3] Temporary failure in name resolution)"))'), '(Request ID: f6383499-72a4-4565-90c9-2618fcdeab33)')
-[rank0]:[W212 09:56:33.729135865 ProcessGroupNCCL.cpp:1524] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
-[0;36m(APIServer pid=3770926)[0;0m Traceback (most recent call last):
-[0;36m(APIServer pid=3770926)[0;0m   File "/usr/lib/python3.10/runpy.py", line 196, in _run_module_as_main
-[0;36m(APIServer pid=3770926)[0;0m     return _run_code(code, main_globals, None,
-[0;36m(APIServer pid=3770926)[0;0m   File "/usr/lib/python3.10/runpy.py", line 86, in _run_code
-[0;36m(APIServer pid=3770926)[0;0m     exec(code, run_globals)
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 991, in <module>
-[0;36m(APIServer pid=3770926)[0;0m     uvloop.run(run_server(args))
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/uvloop/__init__.py", line 69, in run
-[0;36m(APIServer pid=3770926)[0;0m     return loop.run_until_complete(wrapper())
-[0;36m(APIServer pid=3770926)[0;0m   File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/uvloop/__init__.py", line 48, in wrapper
-[0;36m(APIServer pid=3770926)[0;0m     return await main
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 919, in run_server
-[0;36m(APIServer pid=3770926)[0;0m     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 938, in run_server_worker
-[0;36m(APIServer pid=3770926)[0;0m     async with build_async_engine_client(
-[0;36m(APIServer pid=3770926)[0;0m   File "/usr/lib/python3.10/contextlib.py", line 199, in __aenter__
-[0;36m(APIServer pid=3770926)[0;0m     return await anext(self.gen)
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 147, in build_async_engine_client
-[0;36m(APIServer pid=3770926)[0;0m     async with build_async_engine_client_from_engine_args(
-[0;36m(APIServer pid=3770926)[0;0m   File "/usr/lib/python3.10/contextlib.py", line 199, in __aenter__
-[0;36m(APIServer pid=3770926)[0;0m     return await anext(self.gen)
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/entrypoints/openai/api_server.py", line 188, in build_async_engine_client_from_engine_args
-[0;36m(APIServer pid=3770926)[0;0m     async_llm = AsyncLLM.from_vllm_config(
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 228, in from_vllm_config
-[0;36m(APIServer pid=3770926)[0;0m     return cls(
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/async_llm.py", line 155, in __init__
-[0;36m(APIServer pid=3770926)[0;0m     self.engine_core = EngineCoreClient.make_async_mp_client(
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 122, in make_async_mp_client
-[0;36m(APIServer pid=3770926)[0;0m     return AsyncMPClient(*client_args)
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 819, in __init__
-[0;36m(APIServer pid=3770926)[0;0m     super().__init__(
-[0;36m(APIServer pid=3770926)[0;0m   File "/home/fergus/.local/lib/python3.10/site-packages/vllm/v1/engine/core_client.py", line 530, in __init__
-[0;36m(APIServer pid=3770926)[0;0m     raise TimeoutError(
-[0;36m(APIServer pid=3770926)[0;0m TimeoutError: Timed out waiting for engines to send initial message on input socket.

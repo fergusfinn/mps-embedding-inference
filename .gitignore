@@ -1,5 +1,6 @@
 __pycache__/
 *.pyc
+venv/
 
 # nsys binary profiles (large, regenerable from scripts)
 *.nsys-rep

@@ -1,0 +1,15 @@
+Warming up...
+Benchmarking for 60s with 1024 concurrent requests, max_tokens=512...
+
+=== Generative Benchmark Results ===
+Duration: 67.3s
+Total requests: 2114
+Total tokens generated: 1082368
+Throughput: 16090.6 tokens/sec
+Avg tokens/request: 512.0
+
+--- Per-request latency ---
+  p50: 30.03s  p95: 35.48s  p99: 38.26s
+--- Per-token latency ---
+  p50: 58.7ms  p95: 69.3ms  p99: 74.7ms
+  Decode rate (p50): 17.0 tok/s/request
