@@ -221,18 +221,35 @@ To test whether concurrent embed load slows down gen kernels via bandwidth compe
 
 All three conditions produce **identical kernel timing and batch throughput**, even with the embed model actively processing concurrent requests. The concurrent embed load does not measurably slow down individual gen kernels.
 
-#### Conclusion on interference mechanism
+#### Root cause: CUDA graph replay interleaving
 
-**Four hypotheses tested, all falsified at the kernel level:**
+The nsys and offline batch tests all use `enforce_eager=True` (no CUDA graphs), while the vLLM server uses CUDA graphs by default. Testing both modes reveals CUDA graphs as the mechanism:
 
-1. ~~L2 cache contention~~ — ncu shows only 0.56 pp L2 hit rate drop with co-location (53.60% → 53.04%)
-2. ~~MPS dispatch latency~~ — nsys shows `cudaLaunchKernel` avg latency is identical (43,675 vs 43,473 ns, -0.5%)
-3. ~~MPS kernel execution overhead~~ — nsys shows total GPU kernel time identical with MPS daemon (+0.2%)
-4. ~~Memory bandwidth competition~~ — nsys concurrent test shows gen kernels run at identical speed with active embed under both MPS (+0.02%) and time-slicing (+0.05%)
+| Condition | CUDA Graphs | Throughput (tok/s) | Decode p50 |
+|---|---|---|---|
+| eager gen-only | OFF | 10,668 | 20.9 tok/s/req |
+| eager MPS + active embed | OFF | 10,279 (-3.6%) | 20.1 tok/s/req |
+| eager time-sliced + active embed | OFF | 9,885 (-7.3%) | 18.8 tok/s/req |
+| graphs MPS + active embed | ON | 22,030 | 43.7 tok/s/req |
+| graphs time-sliced + active embed | ON | 23,113 | 46.4 tok/s/req |
 
-**The 5.3% A/B test gap does not appear in offline batch generation.** The nsys tests use `ncu_decode_probe.py` (offline vLLM LLM engine, 64 prompts, ~12s burst), while the A/B test uses the vLLM HTTP server with C=512 sustained over 60s. The interference mechanism is specific to the sustained server workload path — likely in vLLM's CPU-side async scheduling loop, HTTP request handling, or inter-process synchronization under MPS, not in GPU kernel execution.
+**Without CUDA graphs**: MPS is 4.0% **faster** than time-slicing (10,279 vs 9,885 tok/s). This is the expected result — MPS avoids context-switch overhead, and individual kernels run at identical speed regardless of sharing mode (confirmed by nsys).
 
-This is consistent with the DCGM data (§3.3) showing nearly identical GPU-level metrics across all conditions. The GPU hardware doesn't care about MPS vs time-slicing at this utilization level. The overhead, if real, is a software-level interaction between the two vLLM server processes when routed through the MPS daemon.
+**With CUDA graphs**: MPS is 4.7% **slower** than time-slicing (22,030 vs 23,113 tok/s). This matches the A/B test's 5.3% gap.
+
+**The mechanism**: CUDA graphs pre-record a sequence of kernel launches and replay them as a single GPU operation, eliminating per-kernel launch overhead (~2.2x throughput improvement). Under time-slicing, the graph replays atomically — the entire kernel sequence executes back-to-back without interruption from the embed process. Under MPS, both processes share a single CUDA context, so the embed model's kernels can be **interleaved into the middle of gen's CUDA graph replay**, breaking the back-to-back execution that graphs are designed to provide. Each interleaved embed kernel adds a small gap in the gen graph's execution, and at ~37k kernels per generation cycle, these gaps accumulate to the observed ~5% overhead.
+
+This also explains why the overhead doesn't appear in individual kernel timing (nsys): each gen kernel still runs at full speed, but the **gaps between kernels** within a graph replay are longer because embed kernels are inserted between them.
+
+#### Summary of hypotheses tested
+
+| Hypothesis | Test | Result |
+|---|---|---|
+| L2 cache contention | ncu L2 hit rate | 0.56 pp drop — **ruled out** |
+| MPS dispatch latency | nsys kernel launch timing | Identical — **ruled out** |
+| Kernel execution overhead | nsys kernel duration | Identical — **ruled out** |
+| Memory bandwidth competition | nsys concurrent test | Identical — **ruled out** |
+| CUDA graph interleaving | enforce-eager A/B test | **Confirmed** — gap disappears without graphs, reverses sign |
 
 ### 3.4 Comparison
 
