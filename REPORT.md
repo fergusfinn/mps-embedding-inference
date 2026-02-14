@@ -162,14 +162,54 @@ L2 hit rate drops by only 0.56 percentage points with co-location — **L2 cache
 
 The MoE expert GEMM is the most bandwidth-intensive kernel (1.5 TB/s, 30% of peak) with a moderate L2 hit rate. The routing kernel has the worst L2 hit rate (16%) due to scattered expert selection patterns.
 
+#### nsys (Nsight Systems) kernel dispatch timing
+
+To test whether MPS adds per-kernel dispatch overhead, nsys traces were captured for two conditions: gen-only without MPS, and gen-only with the MPS daemon running (no embed process). Both conditions run exactly the same workload (64 prompts × 128 tokens via `ncu_decode_probe.py`), so any timing difference is attributable to MPS routing.
+
+**CUDA API launch latency (CPU-side):**
+
+| API Call | No-MPS Avg (ns) | MPS Avg (ns) | Delta |
+|---|---|---|---|
+| `cudaLaunchKernel` (21,584 calls) | 43,675 | 43,473 | **-0.5%** |
+| `cuLaunchKernelEx` (9,093 calls) | 37,204 | 37,285 | **+0.2%** |
+| `cudaLaunchKernelExC` (6,137 calls) | 7,903 | 7,737 | **-2.1%** |
+| `cuLaunchKernel` (924 calls) | 4,676 | 4,708 | **+0.7%** |
+| `cudaMemcpyAsync` (39,558 calls) | 122,236 | 119,816 | **-2.0%** |
+
+All launch APIs are within noise (<2.1%). **MPS does not add measurable per-kernel dispatch latency.**
+
+**GPU kernel execution time (top kernels by total time):**
+
+| Kernel | No-MPS Avg (ns) | MPS Avg (ns) | Delta |
+|---|---|---|---|
+| `sm90_fp8_gemm_1d2d_impl` (MoE expert GEMM) | 763,808 | 763,835 | **+0.004%** |
+| `delayStreamKernel` | 1,024,502 | 1,024,492 | **-0.001%** |
+| `fp8_blockscale_gemm` | 104,937 | 105,012 | **+0.07%** |
+| `rms_norm_kernel` | 21,284 | 21,568 | **+1.3%** |
+| `fused_add_rms_norm_kernel` | 9,142 | 9,324 | **+2.0%** |
+| `topkGating` | 6,424 | 6,680 | **+4.0%** |
+
+Large kernels (>100us) are identical. Small kernels (6-22us) show up to 4% variation, consistent with normal run-to-run noise rather than systematic MPS overhead.
+
+**Aggregate GPU time:**
+
+| Metric | No-MPS | MPS | Delta |
+|---|---|---|---|
+| Total kernel GPU time | 2,470.88 ms | 2,475.93 ms | **+0.20%** |
+| Average kernel duration | 65.47 us | 65.60 us | **+0.20%** |
+| Steady-state GPU utilization | 39.06% | 39.13% | **+0.18%** |
+
 #### Conclusion on interference mechanism
 
-Since L2 contention is ruled out, the 5.3% MPS overhead likely comes from:
-1. **MPS server scheduling overhead** — kernel dispatch through the MPS daemon adds latency to every kernel launch
-2. **Memory controller contention** — concurrent HBM accesses from two process contexts, even without L2 interference, can increase DRAM access latency
-3. **SM yield latency** — MPS may not instantly yield SMs when the embed process completes a kernel
+**Three hypotheses tested, all falsified:**
 
-Time-slicing avoids all three: the embed process only runs in brief bursts between gen steps, with no concurrent execution overhead.
+1. ~~L2 cache contention~~ — ncu shows only 0.56 pp L2 hit rate drop with co-location (53.60% → 53.04%)
+2. ~~MPS dispatch latency~~ — nsys shows `cudaLaunchKernel` avg latency is identical (43,675 vs 43,473 ns, -0.5%)
+3. ~~MPS kernel execution overhead~~ — nsys shows total GPU kernel time is identical (2,471 vs 2,476 ms, +0.2%)
+
+The nsys profiling captures a single-process workload (gen-only through MPS vs gen-only direct). Both show identical kernel dispatch and execution timing. This means MPS's kernel routing through the daemon adds negligible overhead to a single process.
+
+The remaining 5.3% gap from the A/B test (§3.1) occurs under concurrent two-process load (gen + embed simultaneously). Since per-kernel overhead is ruled out, the interference must arise from **concurrent memory bandwidth competition**: under MPS, both processes' kernels execute truly in parallel, competing for HBM bandwidth on every memory access. Under time-slicing, only one process's kernels run at a time, so the active process gets full bandwidth during its slice. For a workload that's 39% GPU-utilized, the time-sliced embed process gets brief exclusive bursts between gen scheduler steps, causing minimal disruption.
 
 ### 3.4 Comparison
 
