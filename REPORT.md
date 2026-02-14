@@ -221,25 +221,64 @@ To test whether concurrent embed load slows down gen kernels via bandwidth compe
 
 All three conditions produce **identical kernel timing and batch throughput**, even with the embed model actively processing concurrent requests. The concurrent embed load does not measurably slow down individual gen kernels.
 
-#### Root cause: CUDA graph replay interleaving
+#### Correlation with `--enforce-eager`
 
-The nsys and offline batch tests all use `enforce_eager=True` (no CUDA graphs), while the vLLM server uses CUDA graphs by default. Testing both modes reveals CUDA graphs as the mechanism:
+The nsys and offline batch tests all use `enforce_eager=True`, while the vLLM server uses torch.compile + CUDA graphs by default. Testing both modes reveals the overhead only appears with the default compilation pipeline:
 
-| Condition | CUDA Graphs | Throughput (tok/s) | Decode p50 |
+| Condition | Mode | Throughput (tok/s) | Decode p50 |
 |---|---|---|---|
-| eager gen-only | OFF | 10,668 | 20.9 tok/s/req |
-| eager MPS + active embed | OFF | 10,279 (-3.6%) | 20.1 tok/s/req |
-| eager time-sliced + active embed | OFF | 9,885 (-7.3%) | 18.8 tok/s/req |
-| graphs MPS + active embed | ON | 22,030 | 43.7 tok/s/req |
-| graphs time-sliced + active embed | ON | 23,113 | 46.4 tok/s/req |
+| eager gen-only | eager | 10,668 | 20.9 tok/s/req |
+| eager MPS + active embed | eager | 10,279 (-3.6%) | 20.1 tok/s/req |
+| eager time-sliced + active embed | eager | 9,885 (-7.3%) | 18.8 tok/s/req |
+| compiled MPS + active embed | compiled | 22,030 | 43.7 tok/s/req |
+| compiled time-sliced + active embed | compiled | 23,113 | 46.4 tok/s/req |
 
-**Without CUDA graphs**: MPS is 4.0% **faster** than time-slicing (10,279 vs 9,885 tok/s). This is the expected result — MPS avoids context-switch overhead, and individual kernels run at identical speed regardless of sharing mode (confirmed by nsys).
+**Eager mode** (`--enforce-eager`): MPS is 4.0% **faster** than time-slicing (10,279 vs 9,885 tok/s). This is the expected result — MPS avoids context-switch overhead.
 
-**With CUDA graphs**: MPS is 4.7% **slower** than time-slicing (22,030 vs 23,113 tok/s). This matches the A/B test's 5.3% gap.
+**Compiled mode** (default): MPS is 4.7% **slower** than time-slicing (22,030 vs 23,113 tok/s). This matches the A/B test's 5.3% gap.
 
-**The mechanism**: CUDA graphs pre-record a sequence of kernel launches and replay them as a single GPU operation, eliminating per-kernel launch overhead (~2.2x throughput improvement). Under time-slicing, the graph replays atomically — the entire kernel sequence executes back-to-back without interruption from the embed process. Under MPS, both processes share a single CUDA context, so the embed model's kernels can be **interleaved into the middle of gen's CUDA graph replay**, breaking the back-to-back execution that graphs are designed to provide. Each interleaved embed kernel adds a small gap in the gen graph's execution, and at ~37k kernels per generation cycle, these gaps accumulate to the observed ~5% overhead.
+#### nsys inter-kernel gap analysis (compiled mode)
 
-This also explains why the overhead doesn't appear in individual kernel timing (nsys): each gen kernel still runs at full speed, but the **gaps between kernels** within a graph replay are longer because embed kernels are inserted between them.
+To test whether MPS widens the gaps between gen kernels (e.g., by interleaving embed kernels), nsys traces were captured from the vLLM **server** (compiled mode, CUDA graphs ON) under both MPS and time-sliced conditions with concurrent embed load (C=64).
+
+**Key finding: nsys shows no `cudaGraphLaunch` calls.** vLLM v0.15.1 uses `torch.compile` with inductor backend + piecewise CUDA graph capture (`cudagraph_mode: FULL_AND_PIECEWISE`), but the runtime execution uses individual kernel launches (`cudaLaunchKernel`, `cuLaunchKernelEx`), not CUDA graph replay. The 1,085 `cudaGraphInstantiateWithFlags` calls are for graph capture during warmup, not for runtime replay.
+
+**Inter-kernel gap comparison (stream 7, heavy compute):**
+
+| Metric | MPS | Time-sliced | Delta |
+|---|---|---|---|
+| Mean gap | 1,856 us | 1,869 us | **-0.7%** |
+| Median gap | 2.0 us | 2.0 us | **0%** |
+| p95 gap | 49.9 us | 52.2 us | **-4.4%** |
+| Total gap time | 25,938 ms | 26,030 ms | **-0.4%** |
+| Total kernel time | 1,268 ms | 1,266 ms | **+0.2%** |
+
+**Inter-kernel gap comparison (stream 25, small kernels):**
+
+| Metric | MPS | Time-sliced | Delta |
+|---|---|---|---|
+| Mean gap | 100.9 us | 102.6 us | **-1.7%** |
+| Median gap | 29.0 us | 29.4 us | **-1.4%** |
+
+**CUDA API timing comparison:**
+
+| API Call | MPS Total (ms) | TS Total (ms) | Delta |
+|---|---|---|---|
+| `cudaMemcpyAsync` (40,767 calls) | 4,736 | 4,853 | **-2.4%** |
+| `cudaStreamSynchronize` (39,136 calls) | 876 | 876 | **0%** |
+| `cudaLaunchKernel` (28,407 calls) | 536 | 543 | **-1.4%** |
+
+All metrics are identical or slightly favor MPS. **The gen process's GPU-side kernel execution and CPU-side CUDA API calls show no measurable overhead from MPS.**
+
+#### Mechanism remains unidentified
+
+The `--enforce-eager` flag disables both torch.compile and CUDA graph capture, fundamentally changing the kernel execution pattern: eager mode produces 37,734 kernels (2,476 ms total GPU time) vs compiled mode's 43,874 kernels (1,506 ms). These are entirely different kernel sets — compiled mode includes fused triton kernels, different GEMM configurations, and additional memcpy operations.
+
+The overhead is real (~5% consistent across multiple A/B tests) and only appears in compiled mode with concurrent embed under MPS. But from the gen process's perspective, nsys shows identical behavior. The cause may lie outside what single-process nsys tracing can observe — possibilities include:
+
+- **MPS daemon CPU overhead**: The MPS control daemon routes all GPU commands from both processes through a single CUDA context. Under compiled mode's higher kernel launch rate (43,874 vs 37,734 kernels), CPU-side routing contention may be higher
+- **GPU hardware scheduler contention**: With MPS, the GPU hardware scheduler must interleave work from two processes sharing the same context. This scheduling overhead may not appear in per-kernel timing but could affect scheduling latency at the hardware level
+- **Memory bandwidth contention at sub-kernel granularity**: Individual kernel durations may be identical, but memory-bound kernels could experience brief stalls from embed traffic that are below nsys's timing resolution
 
 #### Summary of hypotheses tested
 
@@ -248,8 +287,9 @@ This also explains why the overhead doesn't appear in individual kernel timing (
 | L2 cache contention | ncu L2 hit rate | 0.56 pp drop — **ruled out** |
 | MPS dispatch latency | nsys kernel launch timing | Identical — **ruled out** |
 | Kernel execution overhead | nsys kernel duration | Identical — **ruled out** |
-| Memory bandwidth competition | nsys concurrent test | Identical — **ruled out** |
-| CUDA graph interleaving | enforce-eager A/B test | **Confirmed** — gap disappears without graphs, reverses sign |
+| Memory bandwidth competition | nsys concurrent test (eager) | Identical — **ruled out** |
+| CUDA graph replay interleaving | nsys gap analysis (compiled) | Gaps identical — **ruled out** |
+| Correlation with torch.compile | enforce-eager A/B test | **Confirmed** — gap only appears in compiled mode |
 
 ### 3.4 Comparison
 
