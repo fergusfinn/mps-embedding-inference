@@ -199,17 +199,40 @@ Large kernels (>100us) are identical. Small kernels (6-22us) show up to 4% varia
 | Average kernel duration | 65.47 us | 65.60 us | **+0.20%** |
 | Steady-state GPU utilization | 39.06% | 39.13% | **+0.18%** |
 
+#### nsys concurrent test (gen + active embed)
+
+To test whether concurrent embed load slows down gen kernels via bandwidth competition, a second nsys test captured gen kernel timing under three conditions: (1) gen-only baseline, (2) gen with active embed via MPS, (3) gen with active embed via time-slicing. The embed server was receiving C=64 concurrent requests throughout.
+
+**Top kernel comparison (`sm90_fp8_gemm_1d2d_impl` 1536×2048, MoE expert GEMM):**
+
+| Condition | Avg (ns) | Delta vs baseline |
+|---|---|---|
+| gen_only | 763,437 | baseline |
+| mps_active (gen + embed concurrent) | 763,567 | **+0.02%** |
+| ts_active (gen + embed concurrent) | 763,831 | **+0.05%** |
+
+**Batch throughput (64 prompts × 128 tokens):**
+
+| Condition | Output tok/s |
+|---|---|
+| gen_only | 641.7 |
+| mps_active | 647.8 |
+| ts_active | 650.7 |
+
+All three conditions produce **identical kernel timing and batch throughput**, even with the embed model actively processing concurrent requests. The concurrent embed load does not measurably slow down individual gen kernels.
+
 #### Conclusion on interference mechanism
 
-**Three hypotheses tested, all falsified:**
+**Four hypotheses tested, all falsified at the kernel level:**
 
 1. ~~L2 cache contention~~ — ncu shows only 0.56 pp L2 hit rate drop with co-location (53.60% → 53.04%)
 2. ~~MPS dispatch latency~~ — nsys shows `cudaLaunchKernel` avg latency is identical (43,675 vs 43,473 ns, -0.5%)
-3. ~~MPS kernel execution overhead~~ — nsys shows total GPU kernel time is identical (2,471 vs 2,476 ms, +0.2%)
+3. ~~MPS kernel execution overhead~~ — nsys shows total GPU kernel time identical with MPS daemon (+0.2%)
+4. ~~Memory bandwidth competition~~ — nsys concurrent test shows gen kernels run at identical speed with active embed under both MPS (+0.02%) and time-slicing (+0.05%)
 
-The nsys profiling captures a single-process workload (gen-only through MPS vs gen-only direct). Both show identical kernel dispatch and execution timing. This means MPS's kernel routing through the daemon adds negligible overhead to a single process.
+**The 5.3% A/B test gap does not appear in offline batch generation.** The nsys tests use `ncu_decode_probe.py` (offline vLLM LLM engine, 64 prompts, ~12s burst), while the A/B test uses the vLLM HTTP server with C=512 sustained over 60s. The interference mechanism is specific to the sustained server workload path — likely in vLLM's CPU-side async scheduling loop, HTTP request handling, or inter-process synchronization under MPS, not in GPU kernel execution.
 
-The remaining 5.3% gap from the A/B test (§3.1) occurs under concurrent two-process load (gen + embed simultaneously). Since per-kernel overhead is ruled out, the interference must arise from **concurrent memory bandwidth competition**: under MPS, both processes' kernels execute truly in parallel, competing for HBM bandwidth on every memory access. Under time-slicing, only one process's kernels run at a time, so the active process gets full bandwidth during its slice. For a workload that's 39% GPU-utilized, the time-sliced embed process gets brief exclusive bursts between gen scheduler steps, causing minimal disruption.
+This is consistent with the DCGM data (§3.3) showing nearly identical GPU-level metrics across all conditions. The GPU hardware doesn't care about MPS vs time-slicing at this utilization level. The overhead, if real, is a software-level interaction between the two vLLM server processes when routed through the MPS daemon.
 
 ### 3.4 Comparison
 
